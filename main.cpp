@@ -263,8 +263,16 @@ void histogram(const std::map<std::string, int>& data)
 }
 
 int main() {
-    Json_Reader reader;
-    if (!reader.ReadFile("settings.json")) {
+
+#ifndef NDEBUG
+	std::cout << "Debug mode" << std::endl;
+	const std::string filename = "../settings.json";
+#else
+	const std::string filename = "settings.json";
+#endif
+
+	Json_Reader reader;
+    if (!reader.ReadFile(filename)) {
         return 1;
     }
 
