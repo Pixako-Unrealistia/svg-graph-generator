@@ -1,0 +1,11 @@
+
+//Available chart types:
+//bar, line, scatter, pie chart
+
+{
+	"Chart_Type" : "bar",
+	"Chart_Title" : "Chart Title",
+	"X_Axis_Title" : "X Axis Title",
+	"Y_Axis_Title" : "Y Axis Title",
+	"Axis_Anchor" : "0,0"
+}

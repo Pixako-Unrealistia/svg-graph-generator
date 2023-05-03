@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470" height="2340" viewBox="0 0 470 2340">
+<text x="235" y="30" text-anchor="middle" font-size="20"> Chart Title</text>
+<text x="235" y="2330" text-anchor="middle" font-size="20"> X Axis Title</text>
+<text x="10" y="1180" text-anchor="middle" font-size="20" transform="rotate(270, 10, 1170)"> Y Axis Title</text>
+<rect x="60" y="290" width="50" height="2000" fill="blue" />
+<rect x="120" y="1290" width="50" height="1000" fill="blue" />
+<rect x="180" y="530" width="50" height="1760" fill="blue" />
+<rect x="240" y="1410" width="50" height="880" fill="blue" />
+<rect x="300" y="50" width="50" height="2240" fill="blue" />
+<rect x="360" y="1690" width="50" height="600" fill="blue" />
