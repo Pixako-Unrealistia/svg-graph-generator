@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 #include <sstream>
 #include <vector>
 #include <map>
@@ -65,6 +66,14 @@ private:
 			value.replace(quote_pos, 1, "");
 			quote_pos = value.find("\"");
 		}
+		//remove all spaces
+		size_t space_pos = value.find(" ");
+		while (space_pos != std::string::npos) {
+			value.replace(space_pos, 1, "");
+			space_pos = value.find(" ");
+		}
+
+
 		return value;
 	}
 	
@@ -140,7 +149,13 @@ void print_bar_chart(const std::map<std::string, int>& data,
 		int y = chart_height - bar_height - 50;
 		svg << "<rect x=\"" << x << "\" y=\"" << y << "\" width=\"" << bar_width << "\" height=\"" << bar_height << "\" fill=\"blue\" />\n";
 		x += bar_width + bar_gap;
+
+		// Create the label
+		svg << "<text x=\"" << x - bar_width / 2 - bar_gap << "\" y=\"" << chart_height - 35 << "\" text-anchor=\"middle\" font-size=\"15\">" << key << "</text>\n";
+		
 	}
+
+	svg << "</svg>";
 
     // Write the SVG document to a file
     std::ofstream output_file(output_filename);
@@ -156,9 +171,75 @@ void print_line_chart(const std::map<std::string, int>& data,
                    const std::string& chart_title,
                    const std::string& x_axis_title,
                    const std::string& y_axis_title,
+				   int line_width,
                    const std::string& output_filename)
 {
+	// Find the maximum value in the data
+	int max_value = 0;
+	for (const auto& [key, value] : data) {
+		if (value > max_value) {
+			max_value = value;
+		}
+	}
 	
+	//idkman
+
+}
+
+void print_pie_chart(const std::map<std::string, int>& data,
+	const std::string& chart_title,
+	const std::string& output_filename)
+{
+
+	// Calculate the value into percentages
+	int total = 0;
+	for (const auto& [key, value] : data) {
+		total += value;
+	}
+
+	// Create the SVG document
+	std::stringstream svg;
+	svg << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"500\" height=\"500\" viewBox=\"0 0 500 500\">\n";
+	
+	// Create the chart title
+	svg << "<text x=\"250\" y=\"30\" text-anchor=\"middle\" font-size=\"20\">" << chart_title << "</text>\n";
+
+	// Create the circle
+	svg << "<circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"white\" stroke=\"black\" stroke-width=\"2\" />\n";
+
+	// Create the pie chart
+	int start_angle = 0;
+	int remaining_angle = 360;
+	auto it = data.begin();
+	while (it != data.end()) {
+		int angle = it->second * 360 / total;
+		if (std::next(it) == data.end()) {
+			angle = remaining_angle;
+		}
+		int end_angle = start_angle + angle;
+		int x1 = 250 + 200 * std::cos(start_angle * 3.14159 / 180);
+		int y1 = 250 + 200 * std::sin(start_angle * 3.14159 / 180);
+		int x2 = 250 + 200 * std::cos(end_angle * 3.14159 / 180);
+		int y2 = 250 + 200 * std::sin(end_angle * 3.14159 / 180);
+		svg << "<path d=\"M250,250 L" << x1 << "," << y1 << " A200,200 0 " << (angle > 180 ? 1 : 0) << ",1 " << x2 << "," << y2 << " Z\" fill=\"blue\" />\n";
+		//write the text
+		int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * 3.14159 / 180);
+		int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * 3.14159 / 180);
+		svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"20\">" << it->first << "</text>\n";
+		start_angle = end_angle;
+		remaining_angle -= angle;
+		it++;
+	}
+
+	// Write the SVG document to a file
+	std::ofstream output_file(output_filename);
+	if (output_file.is_open()) {
+		output_file << svg.str();
+		output_file.close();
+	}
+	else {
+		std::cerr << "Error: could not write to file " << output_filename << std::endl;
+	}
 }
 
 
@@ -187,10 +268,23 @@ int main() {
 
 
 	std::cout << "Chart Type:" << chart_type << std::endl;
-	if (data[0] == " bar") {
+	if (data[0] == "bar") {
 		std::cout << "Bar chart" << std::endl;
 		const auto& csv_data = Csv_Reader("data.csv");
 		print_bar_chart(csv_data, data[1], data[2], data[3], 50, 10, "output.svg");
+	}
+	else if (data[0] == "line") {
+		std::cout << "Line chart" << std::endl;
+		const auto& csv_data = Csv_Reader("data.csv");
+		print_line_chart(csv_data, data[1], data[2], data[3], 10, "output.svg");
+	}
+	else if (data[0] == "pie") {
+		std::cout << "Pie chart" << std::endl;
+		const auto& csv_data = Csv_Reader("data.csv");
+		print_pie_chart(csv_data, data[1], "output.svg");
+	}
+	else {
+		std::cout << "Invalid chart type" << std::endl;
 	}
 
 
