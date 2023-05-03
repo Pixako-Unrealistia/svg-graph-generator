@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 
+const float  pi = 3.14159265358979323846;
+
 class Json_Reader {
 public:
     Json_Reader() {}
@@ -205,7 +207,7 @@ void print_pie_chart(const std::map<std::string, int>& data,
 	svg << "<text x=\"250\" y=\"30\" text-anchor=\"middle\" font-size=\"20\">" << chart_title << "</text>\n";
 
 	// Create the circle
-	svg << "<circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"white\" stroke=\"black\" stroke-width=\"2\" />\n";
+	svg << "<circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"blue\" stroke=\"black\" stroke-width=\"2\" />\n";
 
 	// Create the pie chart
 	int start_angle = 0;
@@ -217,14 +219,14 @@ void print_pie_chart(const std::map<std::string, int>& data,
 			angle = remaining_angle;
 		}
 		int end_angle = start_angle + angle;
-		int x1 = 250 + 200 * std::cos(start_angle * 3.14159 / 180);
-		int y1 = 250 + 200 * std::sin(start_angle * 3.14159 / 180);
-		int x2 = 250 + 200 * std::cos(end_angle * 3.14159 / 180);
-		int y2 = 250 + 200 * std::sin(end_angle * 3.14159 / 180);
+		int x1 = 250 + 200 * std::cos(start_angle * pi / 180);
+		int y1 = 250 + 200 * std::sin(start_angle * pi / 180);
+		int x2 = 250 + 200 * std::cos(end_angle * pi / 180);
+		int y2 = 250 + 200 * std::sin(end_angle * pi / 180);
 		svg << "<path d=\"M250,250 L" << x1 << "," << y1 << " A200,200 0 " << (angle > 180 ? 1 : 0) << ",1 " << x2 << "," << y2 << " Z\" fill=\"blue\" />\n";
 		//write the text
-		int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * 3.14159 / 180);
-		int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * 3.14159 / 180);
+		int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * pi / 180);
+		int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * pi / 180);
 		svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"20\">" << it->first << "</text>\n";
 		start_angle = end_angle;
 		remaining_angle -= angle;
@@ -242,6 +244,23 @@ void print_pie_chart(const std::map<std::string, int>& data,
 	}
 }
 
+
+void histogram(const std::map<std::string, int>& data)
+{
+	auto it = data.begin();
+	while (it != data.end())
+	{
+		std::cout << it->first << ": ";
+		for (int i = 0; i < it->second; i++)
+		{
+				std::cout << "*";
+		}
+
+		std::cout << it->second << std::endl;
+		it++;
+	}
+
+}
 
 int main() {
     Json_Reader reader;
@@ -266,21 +285,18 @@ int main() {
 
 
 
+	const auto& csv_data = Csv_Reader("data.csv");
 
-	std::cout << "Chart Type:" << chart_type << std::endl;
 	if (data[0] == "bar") {
 		std::cout << "Bar chart" << std::endl;
-		const auto& csv_data = Csv_Reader("data.csv");
 		print_bar_chart(csv_data, data[1], data[2], data[3], 50, 10, "output.svg");
 	}
 	else if (data[0] == "line") {
 		std::cout << "Line chart" << std::endl;
-		const auto& csv_data = Csv_Reader("data.csv");
 		print_line_chart(csv_data, data[1], data[2], data[3], 10, "output.svg");
 	}
 	else if (data[0] == "pie") {
 		std::cout << "Pie chart" << std::endl;
-		const auto& csv_data = Csv_Reader("data.csv");
 		print_pie_chart(csv_data, data[1], "output.svg");
 	}
 	else {
@@ -288,6 +304,7 @@ int main() {
 	}
 
 
+	histogram(csv_data);
 
 	/*
 	const auto& csv_data = Csv_Reader("data.csv");
