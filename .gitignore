@@ -36,3 +36,6 @@
 
 # Build
 build/
+
+# Output files
+output.svg
