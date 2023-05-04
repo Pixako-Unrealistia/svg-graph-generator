@@ -12,13 +12,17 @@ Fundamental objective
 - Histogram in console 
 - Output as svg 
 
-Objects 
-
-
 
 
 Libraries
-- 
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cmath>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <stdlib.h>
 
 
 
