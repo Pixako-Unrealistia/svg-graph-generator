@@ -29,15 +29,15 @@ target_link_libraries(chart_test OrderedMap CSVReader JsonReader Chart)
 
 add_test(
     NAME ordered_map_test
-    COMMAND ordered_map_test
+    COMMAND $<TARGET_FILE:ordered_map_test>
 )
 add_test(
     NAME histogram_test
-    COMMAND histogram_test
+    COMMAND $<TARGET_FILE:histogram_test>
 )
 add_test(
     NAME chart_test
-    COMMAND chart_test
+    COMMAND $<TARGET_FILE:chart_test>
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
