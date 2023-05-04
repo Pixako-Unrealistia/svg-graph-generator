@@ -1,6 +1,6 @@
 #include "CSVReader.hpp"
 
-OrderedMap<std::string, int> CSVReader::readFile(const std::string &filename)
+bool CSVReader::readFile(const std::string &filename)
 {
     std::ifstream file(filename);
 
@@ -10,7 +10,7 @@ OrderedMap<std::string, int> CSVReader::readFile(const std::string &filename)
         throw std::runtime_error("Error opening file, cannot read file at '" + absolute_path + '\'');
     }
 
-    OrderedMap<std::string, int> data;
+    OrderedMap<std::string, double> data;
 
     std::string line;
     while (std::getline(file, line))
@@ -24,5 +24,12 @@ OrderedMap<std::string, int> CSVReader::readFile(const std::string &filename)
     }
 
     file.close();
-    return data;
+    this->data = data;
+
+    return true;
+}
+
+OrderedMap<std::string, double> CSVReader::getData() const
+{
+    return this->data;
 }

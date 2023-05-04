@@ -6,7 +6,7 @@ Chart::Chart(
     const std::string &x_axis_title,
     const std::string &y_axis_title,
     const std::string &axis_anchor,
-    const OrderedMap<std::string, int> &dataset)
+    const OrderedMap<std::string, double> &dataset)
 {
 
     this->type = type;

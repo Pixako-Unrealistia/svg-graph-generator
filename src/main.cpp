@@ -19,12 +19,11 @@ try
 	const std::string data_filename = "data.csv";
 #endif
 
-	JsonReader reader;
+	JsonReader jsonReader;
 	CSVReader csvReader;
 
-	// TODO: Make readFile both consistent
-	reader.readFile(settings_filename);
-	const OrderedMap<std::string, int> &csv_data = csvReader.readFile(data_filename);
+	jsonReader.readFile(settings_filename);
+	csvReader.readFile(data_filename);
 
 	/*
 	std::cout << "Chart Type: " << data[0] << std::endl;
@@ -33,9 +32,12 @@ try
 	std::cout << "Y Axis Title: " << data[3] << std::endl;
 	std::cout << "Axis Anchor: " << data[4] << std::endl;
 	*/
-	const auto &data = reader.getData();
+
+	const std::vector<std::string> &settings_data = jsonReader.getData();
+	const OrderedMap<std::string, double> &csv_data = csvReader.getData();
+
 	Chart chart = Chart(
-		Chart::typeFromString(data[0]), data[1], data[2], data[3], data[4], csv_data);
+		Chart::typeFromString(settings_data[0]), settings_data[1], settings_data[2], settings_data[3], settings_data[4], csv_data);
 
 	switch (chart.getType())
 	{
@@ -54,14 +56,6 @@ try
 	}
 
 	chart.printHistogramChart();
-
-	/*
-	const auto& csv_data = Csv_Reader("data.csv");
-	for (const auto& [key, value] : csv_data) {
-		std::cout << key << " " << value << std::endl;
-	}
-	*/
-
 	return 0;
 }
 catch (const std::exception &e)

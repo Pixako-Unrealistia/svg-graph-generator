@@ -32,7 +32,7 @@ public:
      * @param axis_anchor The anchor point for the axis. This determines where the axis will be positioned on the chart.
      * @param dataset The data to be plotted on the chart.
      */
-    Chart(Type type, const std::string &title, const std::string &x_axis_title, const std::string &y_axis_title, const std::string &axis_anchor, const OrderedMap<std::string, int> &dataset);
+    Chart(Type type, const std::string &title, const std::string &x_axis_title, const std::string &y_axis_title, const std::string &axis_anchor, const OrderedMap<std::string, double> &dataset);
 
     /**
      * @brief Converts a string representation of a chart type to its enum class representation.
@@ -85,5 +85,5 @@ private:
     std::string x_axis_title;
     std::string y_axis_title;
     std::string axis_anchor;
-    OrderedMap<std::string, int> dataset;
+    OrderedMap<std::string, double> dataset;
 };
