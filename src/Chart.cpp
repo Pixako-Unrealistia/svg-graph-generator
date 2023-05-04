@@ -155,7 +155,7 @@ void Chart::printBarChart(const int bar_width, const int bar_gap, const std::str
     }
     else
     {
-        std::cerr << "Error: could not write to file " << output_filename << std::endl;
+        throw std::runtime_error("Error: could not write to file " + output_filename);
     }
 }
 
@@ -258,7 +258,7 @@ void Chart::printPieChart(const std::string &output_filename)
     }
     else
     {
-        std::cerr << "Error: could not write to file " << output_filename << std::endl;
+        throw std::runtime_error("Error: could not write to file " + output_filename);
     }
 }
 
@@ -319,7 +319,7 @@ void Chart::printLineChart(const int line_width, const std::string &output_filen
     }
     else
     {
-        std::cerr << "Error: could not write to file " << output_filename << std::endl;
+        throw std::runtime_error("Error: could not write to file " + output_filename);
     }
 }
 
@@ -404,7 +404,7 @@ void Chart::printScatterChart(const int point_size, const std::string &output_fi
     }
     else
     {
-        std::cerr << "Error: could not write to file " << output_filename << std::endl;
+        throw std::runtime_error("Error: could not write to file " + output_filename);
     }
 }
 
