@@ -200,7 +200,7 @@ void Chart::printPieChart(const std::string &output_filename)
         // Write the text
         int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * M_PI / 180);
         int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * M_PI / 180);
-		font_size = font_size * angle / 360;
+		font_size = font_size * (start_angle + angle / 360);
 
 		svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"" << font_size << "\">" << it->first << "</text>\n";
         start_angle = end_angle;
