@@ -9,8 +9,6 @@
 #include "JsonReader.hpp"
 #include "CSVReader.hpp"
 
-const float pi = 3.14159265358979323846;
-
 void print_bar_chart(const std::map<std::string, int> &data,
 					 const std::string &chart_title,
 					 const std::string &x_axis_title,
@@ -131,14 +129,14 @@ void print_pie_chart(const std::map<std::string, int> &data,
 			angle = remaining_angle;
 		}
 		int end_angle = start_angle + angle;
-		int x1 = 250 + 200 * std::cos(start_angle * pi / 180);
-		int y1 = 250 + 200 * std::sin(start_angle * pi / 180);
-		int x2 = 250 + 200 * std::cos(end_angle * pi / 180);
-		int y2 = 250 + 200 * std::sin(end_angle * pi / 180);
+		int x1 = 250 + 200 * std::cos(start_angle * M_PI / 180);
+		int y1 = 250 + 200 * std::sin(start_angle * M_PI / 180);
+		int x2 = 250 + 200 * std::cos(end_angle * M_PI / 180);
+		int y2 = 250 + 200 * std::sin(end_angle * M_PI / 180);
 		svg << "<path d=\"M250,250 L" << x1 << "," << y1 << " A200,200 0 " << (angle > 180 ? 1 : 0) << ",1 " << x2 << "," << y2 << " Z\" fill=\"blue\" />\n";
 		// write the text
-		int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * pi / 180);
-		int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * pi / 180);
+		int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * M_PI / 180);
+		int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * M_PI / 180);
 		svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"20\">" << it->first << "</text>\n";
 		start_angle = end_angle;
 		remaining_angle -= angle;
