@@ -36,6 +36,46 @@ Chart::Type Chart::typeFromString(const std::string &str)
     }
 }
 
+std::string Chart::randomHexColor()
+{
+    float golden_ratio_conjugate = 0.618033988749895f;
+    float saturation = 0.5f;
+    float value = 0.95f;
+
+    static float hue = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+
+    hue += golden_ratio_conjugate;
+    hue = std::fmod(hue, 1.0f);
+
+    std::uint8_t red, green, blue;
+
+    if (hue < 1.0f / 3.0f)
+    {
+        red = static_cast<std::uint8_t>((hue * 3.0f) * value * 255);
+        green = static_cast<std::uint8_t>(value * 255);
+        blue = static_cast<std::uint8_t>(0);
+    }
+    else if (hue < 2.0f / 3.0f)
+    {
+        red = static_cast<std::uint8_t>(value * 255);
+        green = static_cast<std::uint8_t>(((2.0f / 3.0f - hue) * 3.0f) * value * 255);
+        blue = static_cast<std::uint8_t>(0);
+    }
+    else
+    {
+        red = static_cast<std::uint8_t>(value * 255);
+        green = static_cast<std::uint8_t>(0);
+        blue = static_cast<std::uint8_t>(((hue - 2.0f / 3.0f) * 3.0f) * value * 255);
+    }
+
+    std::ostringstream oss;
+    oss << "#" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(red)
+        << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(green)
+        << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(blue);
+
+    return oss.str();
+}
+
 Chart::Type Chart::getType() const
 {
     return this->type;
@@ -97,7 +137,7 @@ void Chart::printBarChart(const int bar_width, const int bar_gap, const std::str
     {
         int bar_height = value * 20;
         int y = chart_height - bar_height - 50;
-        svg << "<rect x=\"" << x << "\" y=\"" << y << "\" width=\"" << bar_width << "\" height=\"" << bar_height << "\" fill=\"blue\" />\n";
+        svg << "<rect x=\"" << x << "\" y=\"" << y << "\" width=\"" << bar_width << "\" height=\"" << bar_height << "\" fill=\"" << Chart::randomHexColor() << "\" />\n";
         x += bar_width + bar_gap;
 
         // Create the label
@@ -137,7 +177,7 @@ void Chart::printPieChart(const std::string &output_filename)
     svg << "<text x=\"250\" y=\"30\" text-anchor=\"middle\" font-size=\"20\">" << this->title << "</text>\n";
 
     // Create the circle
-    svg << "<circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"blue\" stroke=\"black\" stroke-width=\"2\" />\n";
+    svg << "<circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"" << Chart::randomHexColor() << "\" stroke=\"black\" stroke-width=\"2\" />\n";
 
     // Create the pie chart
     int start_angle = 0;
@@ -155,7 +195,7 @@ void Chart::printPieChart(const std::string &output_filename)
         int y1 = 250 + 200 * std::sin(start_angle * M_PI / 180);
         int x2 = 250 + 200 * std::cos(end_angle * M_PI / 180);
         int y2 = 250 + 200 * std::sin(end_angle * M_PI / 180);
-        svg << "<path d=\"M250,250 L" << x1 << "," << y1 << " A200,200 0 " << (angle > 180 ? 1 : 0) << ",1 " << x2 << "," << y2 << " Z\" fill=\"blue\" />\n";
+        svg << "<path d=\"M250,250 L" << x1 << "," << y1 << " A200,200 0 " << (angle > 180 ? 1 : 0) << ",1 " << x2 << "," << y2 << " Z\" fill=\"" << Chart::randomHexColor() << "\" />\n";
         // Write the text
         int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * M_PI / 180);
         int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * M_PI / 180);
@@ -215,7 +255,7 @@ void Chart::printLineChart(const int line_width, const std::string &output_filen
         int y = chart_height - value * 20 - 50;
         if (prev_x != 0 && prev_y != 0)
         {
-            svg << "<line x1=\"" << prev_x << "\" y1=\"" << prev_y << "\" x2=\"" << x << "\" y2=\"" << y << "\" stroke=\"blue\" stroke-width=\"" << line_width << "\" />\n";
+            svg << "<line x1=\"" << prev_x << "\" y1=\"" << prev_y << "\" x2=\"" << x << "\" y2=\"" << y << "\" stroke=\"" << Chart::randomHexColor() << "\" stroke-width=\"" << line_width << "\" />\n";
         }
         // svg << "<circle cx=\"" << x << "\" cy=\"" << y << "\" r=\"" << line_width + 2 << "\" fill=\"white\" stroke=\"blue\" stroke-width=\"" << line_width << "\" />\n";
         svg << "<text x=\"" << x << "\" y=\"" << y - 10 << "\" text-anchor=\"middle\" font-size=\"15\">" << key << " " << value << "</text>\n";
@@ -304,7 +344,7 @@ void Chart::printScatterChart(const int point_size, const std::string &output_fi
     for (const auto &[key, value] : this->dataset)
     {
         int y = chart_height - value * 20 - 50;
-        svg << "<circle cx=\"" << x << "\" cy=\"" << y << "\" r=\"" << point_size << "\" fill=\"blue\" />\n";
+        svg << "<circle cx=\"" << x << "\" cy=\"" << y << "\" r=\"" << point_size << "\" fill=\"" << Chart::randomHexColor() << "\" />\n";
         svg << "<text x=\"" << x << "\" y=\"" << y - 10 << "\" text-anchor=\"middle\" font-size=\"15\">" << key << " " << value << "</text>\n";
         x += 50;
     }

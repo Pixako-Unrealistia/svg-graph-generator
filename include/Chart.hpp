@@ -110,4 +110,9 @@ private:
     std::string y_axis_title;
     std::string axis_anchor;
     OrderedMap<std::string, double> dataset;
+
+    /**
+     * @brief Gets random hex color.
+     */
+    static std::string randomHexColor();
 };
