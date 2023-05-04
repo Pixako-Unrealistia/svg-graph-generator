@@ -161,7 +161,6 @@ void Chart::printBarChart(const int bar_width, const int bar_gap, const std::str
 
 void Chart::printPieChart(const std::string &output_filename)
 {
-
     // Calculate the value into percentages
     int total = 0;
     for (const auto &[key, value] : this->dataset)
@@ -199,11 +198,56 @@ void Chart::printPieChart(const std::string &output_filename)
         // Write the text
         int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * M_PI / 180);
         int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * M_PI / 180);
-        svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"20\">" << it->first << "</text>\n";
+
+        // Very efficient way to determine the font size using high-level advanced mathematics
+
+        int font_size = 20;
+        double percentage = static_cast<double>(it->second) / total * 100.0;
+
+        if (percentage > 50)
+        {
+            font_size = 20;
+        }
+        else if (percentage <= 50 && percentage > 30)
+        {
+            font_size = 18;
+        }
+        else if (percentage <= 30 && percentage > 20)
+        {
+            font_size = 17;
+        }
+        else if (percentage <= 20 && percentage > 10)
+        {
+            font_size = 16;
+        }
+        else if (percentage <= 10 && percentage > 7)
+        {
+            font_size = 15;
+        }
+        else if (percentage <= 7 && percentage > 5)
+        {
+            font_size = 10;
+        }
+        else if (percentage <= 5 && percentage > 3)
+        {
+            font_size = 7;
+        }
+        else if (percentage <= 3 && percentage > 1)
+        {
+            font_size = 5;
+        }
+        else
+        {
+            font_size = 4;
+        }
+
+        svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"" << font_size << "\">" << it->first << "</text>\n";
         start_angle = end_angle;
         remaining_angle -= angle;
         it++;
     }
+
+    svg << "</svg>";
 
     // Write the SVG document to a file
     std::ofstream output_file(output_filename);
