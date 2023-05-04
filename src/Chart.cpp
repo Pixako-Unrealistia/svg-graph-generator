@@ -160,10 +160,18 @@ void Chart::printPieChart(const std::string &output_filename)
 
 void Chart::printHistogramChart()
 {
+    // Find the length of the longest label in the dataset
+    size_t maxLabelLength = 0;
+    for (const auto &entry : this->dataset)
+    {
+        maxLabelLength = std::max(maxLabelLength, entry.first.length());
+    }
+
+    // Print the chart with equal padding for all labels
     auto it = this->dataset.begin();
     while (it != this->dataset.end())
     {
-        std::cout << it->first << ": ";
+        std::cout << std::setw(maxLabelLength) << std::left << it->first << ": ";
         for (int i = 0; i < it->second; i++)
         {
             std::cout << "*";
