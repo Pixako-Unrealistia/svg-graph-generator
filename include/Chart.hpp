@@ -66,6 +66,14 @@ public:
     void printPieChart(const std::string &output_filename);
 
     /**
+     * @brief Prints line charts
+     *
+     * @param line_width The width of each line in the chart.
+     * @param output_filename The name of the output file.
+     */
+    void printLineChart(const int line_width, const std::string &output_filename);
+
+    /**
      * @brief Prints histogram charts
      *
      */

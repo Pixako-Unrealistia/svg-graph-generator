@@ -45,8 +45,7 @@ try
 		break;
 	case Chart::Type::LINE:
 		std::cout << "Line chart" << std::endl;
-		// TODO
-		// print_line_chart(csv_data, data[1], data[2], data[3], 10, "output.svg");
+		chart.printLineChart(10, "output.svg");
 		break;
 	case Chart::Type::PIE:
 		std::cout << "Pie chart" << std::endl;
