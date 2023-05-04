@@ -201,34 +201,26 @@ try
 	std::cout << "Axis Anchor: " << data[4] << std::endl;
 	*/
 	const auto &data = reader.getData();
+	Chart chart = Chart(
+		Chart::typeFromString(data[0]), data[1], data[2], data[3], data[4]);
 
-	std::string chart_type = data[0];
-	std::string chart_title = data[1];
-	std::string x_axis_title = data[2];
-	std::string y_axis_title = data[3];
-	std::string axis_anchor = data[4];
-
-	CSVReader csvReader;
-	const auto &csv_data = csvReader.ReadFile(data_filename);
-
-	if (data[0] == "bar")
+	switch (chart.getType())
 	{
+	case Chart::Type::BAR:
 		std::cout << "Bar chart" << std::endl;
 		print_bar_chart(csv_data, data[1], data[2], data[3], 50, 10, "output.svg");
-	}
-	else if (data[0] == "line")
-	{
+		break;
+	case Chart::Type::LINE:
 		std::cout << "Line chart" << std::endl;
 		print_line_chart(csv_data, data[1], data[2], data[3], 10, "output.svg");
-	}
-	else if (data[0] == "pie")
-	{
+		break;
+	case Chart::Type::PIE:
 		std::cout << "Pie chart" << std::endl;
 		print_pie_chart(csv_data, data[1], "output.svg");
-	}
-	else
-	{
+		break;
+	default:
 		std::cout << "Invalid chart type" << std::endl;
+		break;
 	}
 
 	histogram(csv_data);
