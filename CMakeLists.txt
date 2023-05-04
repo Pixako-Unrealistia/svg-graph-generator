@@ -39,6 +39,12 @@ add_test(
     NAME chart_test
     COMMAND $<TARGET_FILE:chart_test>
 )
+add_custom_target(ordered_map_check COMMAND ${CMAKE_CTEST_COMMAND}
+                  DEPENDS $<TARGET_FILE:ordered_map_test>)
+add_custom_target(histogram_check COMMAND ${CMAKE_CTEST_COMMAND}
+                  DEPENDS $<TARGET_FILE:histogram_test>)
+add_custom_target(chart_check COMMAND ${CMAKE_CTEST_COMMAND}
+                  DEPENDS $<TARGET_FILE:chart_test>)                  
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
