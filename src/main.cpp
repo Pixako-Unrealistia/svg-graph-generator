@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include <filesystem>
 
 int main(int argc, const char *const *const argv)
 try
@@ -42,19 +43,20 @@ try
 	switch (chart.getType())
 	{
 	case Chart::Type::BAR:
-		std::cout << "Bar chart" << std::endl;
 		chart.printBarChart(50, 10, "output.svg");
 		break;
 	case Chart::Type::LINE:
-		std::cout << "Line chart" << std::endl;
 		chart.printLineChart(10, "output.svg");
 		break;
 	case Chart::Type::PIE:
-		std::cout << "Pie chart" << std::endl;
 		chart.printPieChart("output.svg");
 		break;
 	}
 
+	std::string absolute_path = std::filesystem::absolute("output.svg").string();
+	std::cout << chart.getTypeString() << " chart exported to " << absolute_path << std::endl;
+
+	std::cout << "Histogram chart" << std::endl;
 	chart.printHistogramChart();
 	return 0;
 }

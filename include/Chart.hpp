@@ -50,6 +50,13 @@ public:
     Type getType() const;
 
     /**
+     * @brief Gets the string representation of the chart type.
+     *
+     * @return The string representation of the chart type.
+     */
+    std::string getTypeString() const;
+
+    /**
      * @brief Prints bar charts
      *
      * @param bar_width The width of each bar in the chart.

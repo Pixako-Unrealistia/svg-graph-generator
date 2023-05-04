@@ -40,6 +40,24 @@ Chart::Type Chart::getType() const
     return this->type;
 }
 
+std::string Chart::getTypeString() const
+{
+    static OrderedMap<Type, std::string> chartTypeMap = {
+        {Type::BAR, "Bar"},
+        {Type::LINE, "Line"},
+        {Type::PIE, "Pie"}};
+
+    auto it = chartTypeMap.find(this->type);
+    if (it != chartTypeMap.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        throw std::invalid_argument("Invalid chart type: " + std::to_string(static_cast<int>(this->type)));
+    }
+}
+
 void Chart::printBarChart(const int bar_width, const int bar_gap, const std::string &output_filename)
 {
     // Find the maximum value in the data
