@@ -27,29 +27,48 @@ target_link_libraries(ordered_map_test OrderedMap)
 target_link_libraries(histogram_test OrderedMap CSVReader JsonReader Chart)
 target_link_libraries(chart_test OrderedMap CSVReader JsonReader Chart)
 
+
+add_test(ordered_map_test_build
+  "${CMAKE_COMMAND}"
+  --build "${CMAKE_BINARY_DIR}"
+  --config "$<CONFIG>"
+  --target ordered_map_test
+)
+set_tests_properties(ordered_map_test_build PROPERTIES FIXTURES_SETUP ordered_map_test_fixture)
 add_test(
     NAME ordered_map_test
     COMMAND $<TARGET_FILE:ordered_map_test>
 )
+set_tests_properties(ordered_map_test PROPERTIES FIXTURES_REQUIRED ordered_map_test_fixture)
+
+add_test(histogram_test_build
+  "${CMAKE_COMMAND}"
+  --build "${CMAKE_BINARY_DIR}"
+  --config "$<CONFIG>"
+  --target histogram_test
+)
+set_tests_properties(histogram_test_build PROPERTIES FIXTURES_SETUP histogram_test_fixture)
 add_test(
     NAME histogram_test
     COMMAND $<TARGET_FILE:histogram_test>
 )
+set_tests_properties(histogram_test PROPERTIES FIXTURES_REQUIRED histogram_test_fixture)
+
+add_test(chart_test_build
+  "${CMAKE_COMMAND}"
+  --build "${CMAKE_BINARY_DIR}"
+  --config "$<CONFIG>"
+  --target chart_test
+)
+set_tests_properties(chart_test_build PROPERTIES FIXTURES_SETUP chart_test_fixture)
 add_test(
     NAME chart_test
     COMMAND $<TARGET_FILE:chart_test>
 )
-add_custom_target(ordered_map_check COMMAND ${CMAKE_CTEST_COMMAND}
-                  DEPENDS $<TARGET_FILE:ordered_map_test>)
-add_custom_target(histogram_check COMMAND ${CMAKE_CTEST_COMMAND}
-                  DEPENDS $<TARGET_FILE:histogram_test>)
-add_custom_target(chart_check COMMAND ${CMAKE_CTEST_COMMAND}
-                  DEPENDS $<TARGET_FILE:chart_test>)                  
+set_tests_properties(chart_test PROPERTIES FIXTURES_REQUIRED chart_test_fixture)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
-add_custom_command(TARGET svg-graph-generator
-                   POST_BUILD
-                   COMMAND ctest -C $<CONFIGURATION> --output-on-failure)
+add_custom_command(TARGET svg-graph-generator POST_BUILD COMMAND ctest -C $<CONFIGURATION> --output-on-failure)
