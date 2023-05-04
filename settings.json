@@ -1,6 +1,6 @@
 
 //Available chart types:
-//bar, line, scatter, pie chart
+//bar, line, scatter, pie
 
 {
 	"Chart_Type" : "bar",
