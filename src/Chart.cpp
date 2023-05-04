@@ -6,7 +6,7 @@ Chart::Chart(
     const std::string &x_axis_title,
     const std::string &y_axis_title,
     const std::string &axis_anchor,
-    const std::map<std::string, int> &dataset)
+    const OrderedMap<std::string, int> &dataset)
 {
 
     this->type = type;
@@ -19,7 +19,7 @@ Chart::Chart(
 
 Chart::Type Chart::typeFromString(const std::string &str)
 {
-    static std::map<std::string, Type> chartTypeMap = {
+    static OrderedMap<std::string, Type> chartTypeMap = {
         {"bar", Type::BAR},
         {"line", Type::LINE},
         {"pie", Type::PIE}};

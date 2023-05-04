@@ -1,6 +1,7 @@
 #pragma once
 
-#include <map>
+#include "OrderedMap.hpp"
+
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -11,5 +12,5 @@ class CSVReader
 {
 public:
     CSVReader() = default;
-    static std::map<std::string, int> readFile(const std::string &filename);
+    static OrderedMap<std::string, int> readFile(const std::string &filename);
 };

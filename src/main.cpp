@@ -1,11 +1,11 @@
 
+#include "OrderedMap.hpp"
 #include "JsonReader.hpp"
 #include "CSVReader.hpp"
 #include "Chart.hpp"
 
 #include <iostream>
 #include <string>
-#include <map>
 
 int main(int argc, const char *const *const argv)
 try
@@ -24,7 +24,7 @@ try
 
 	// TODO: Make readFile both consistent
 	reader.readFile(settings_filename);
-	const std::map<std::string, int> &csv_data = csvReader.readFile(data_filename);
+	const OrderedMap<std::string, int> &csv_data = csvReader.readFile(data_filename);
 
 	/*
 	std::cout << "Chart Type: " << data[0] << std::endl;
