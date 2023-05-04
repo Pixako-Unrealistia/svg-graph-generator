@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
+#include <limits>
 
 class Chart
 {

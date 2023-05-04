@@ -20,7 +20,7 @@ bool CSVReader::readFile(const std::string &filename)
         std::string value;
         std::getline(ss, key, ',');
         std::getline(ss, value, ',');
-        data.insert(std::make_pair(key, std::stoi(value)));
+        data.insert(std::make_pair(key, std::stod(value)));
     }
 
     file.close();
