@@ -1,3 +1,8 @@
+
+#include "JsonReader.hpp"
+#include "CSVReader.hpp"
+#include "Chart.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -5,9 +10,6 @@
 #include <sstream>
 #include <vector>
 #include <map>
-
-#include "JsonReader.hpp"
-#include "CSVReader.hpp"
 
 void print_bar_chart(const std::map<std::string, int> &data,
 					 const std::string &chart_title,
@@ -172,7 +174,8 @@ void histogram(const std::map<std::string, int> &data)
 	}
 }
 
-int main()
+int main(int argc, const char *const *const argv)
+try
 {
 
 #ifndef NDEBUG
@@ -184,12 +187,12 @@ int main()
 #endif
 
 	JsonReader reader;
-	if (!reader.ReadFile(settings_filename))
-	{
-		return 1;
-	}
+	CSVReader csvReader;
 
-	const auto &data = reader.GetData();
+	// TOOD: Make readFile both consistent
+	reader.readFile(settings_filename);
+	const auto &csv_data = csvReader.readFile(data_filename);
+
 	/*
 	std::cout << "Chart Type: " << data[0] << std::endl;
 	std::cout << "Chart Title: " << data[1] << std::endl;
@@ -197,6 +200,7 @@ int main()
 	std::cout << "Y Axis Title: " << data[3] << std::endl;
 	std::cout << "Axis Anchor: " << data[4] << std::endl;
 	*/
+	const auto &data = reader.getData();
 
 	std::string chart_type = data[0];
 	std::string chart_title = data[1];
@@ -233,7 +237,18 @@ int main()
 	const auto& csv_data = Csv_Reader("data.csv");
 	for (const auto& [key, value] : csv_data) {
 		std::cout << key << " " << value << std::endl;
-	}*/
+	}
+	*/
 
 	return 0;
+}
+catch (const std::exception &e)
+{
+	std::cerr << "Exception: " << e.what() << '\n';
+	return 1;
+}
+catch (...)
+{
+	std::cerr << "Unknown exception\n";
+	return 2;
 }

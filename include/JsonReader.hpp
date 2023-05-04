@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <filesystem>
 
 class JsonReader
 {
@@ -17,7 +18,7 @@ public:
      * @param filename The name of the JSON file to read.
      * @return True if the file was successfully read, false otherwise.
      */
-    bool ReadFile(const std::string &filename);
+    bool readFile(const std::string &filename);
 
     /**
      * @brief Gets the data from the JSON string and returns it as a vector of strings.
@@ -32,10 +33,10 @@ public:
      *
      * @return A vector of strings containing the data extracted from the JSON string.
      */
-    std::vector<std::string> GetData() const;
+    std::vector<std::string> getData() const;
 
 private:
-    std::string GetValue(size_t pos, const std::string &key) const;
+    std::string getValue(size_t pos, const std::string &key) const;
 
     std::string json_string_;
 };

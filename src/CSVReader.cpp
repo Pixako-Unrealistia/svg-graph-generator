@@ -1,13 +1,13 @@
 #include "CSVReader.hpp"
 
-std::map<std::string, int> CSVReader::ReadFile(const std::string &file_name)
+std::map<std::string, int> CSVReader::readFile(const std::string &filename)
 {
-    std::ifstream file(file_name);
+    std::ifstream file(filename);
 
     if (!file.is_open())
     {
-        std::cerr << "Error opening file: " << file_name << std::endl;
-        return {};
+        std::string absolute_path = std::filesystem::absolute(filename).string();
+        throw std::runtime_error("Error opening file, cannot read file at '" + absolute_path + '\'');
     }
 
     std::map<std::string, int> data;
