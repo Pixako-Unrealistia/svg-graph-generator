@@ -22,7 +22,8 @@ Chart::Type Chart::typeFromString(const std::string &str)
     static OrderedMap<std::string, Type> chartTypeMap = {
         {"bar", Type::BAR},
         {"line", Type::LINE},
-        {"pie", Type::PIE}};
+        {"pie", Type::PIE},
+        {"scatter", Type::SCATTER}};
 
     auto it = chartTypeMap.find(str);
     if (it != chartTypeMap.end())
@@ -45,7 +46,8 @@ std::string Chart::getTypeString() const
     static OrderedMap<Type, std::string> chartTypeMap = {
         {Type::BAR, "Bar"},
         {Type::LINE, "Line"},
-        {Type::PIE, "Pie"}};
+        {Type::PIE, "Pie"},
+        {Type::SCATTER, "Scatter"}};
 
     auto it = chartTypeMap.find(this->type);
     if (it != chartTypeMap.end())
@@ -154,7 +156,7 @@ void Chart::printPieChart(const std::string &output_filename)
         int x2 = 250 + 200 * std::cos(end_angle * M_PI / 180);
         int y2 = 250 + 200 * std::sin(end_angle * M_PI / 180);
         svg << "<path d=\"M250,250 L" << x1 << "," << y1 << " A200,200 0 " << (angle > 180 ? 1 : 0) << ",1 " << x2 << "," << y2 << " Z\" fill=\"blue\" />\n";
-        // write the text
+        // Write the text
         int x3 = 250 + 200 * std::cos((start_angle + angle / 2) * M_PI / 180);
         int y3 = 250 + 200 * std::sin((start_angle + angle / 2) * M_PI / 180);
         svg << "<text x=\"" << x3 << "\" y=\"" << y3 << "\" text-anchor=\"middle\" font-size=\"20\">" << it->first << "</text>\n";
@@ -219,6 +221,91 @@ void Chart::printLineChart(const int line_width, const std::string &output_filen
         svg << "<text x=\"" << x << "\" y=\"" << y - 10 << "\" text-anchor=\"middle\" font-size=\"15\">" << key << " " << value << "</text>\n";
         prev_x = x;
         prev_y = y;
+        x += 50;
+    }
+
+    svg << "</svg>";
+
+    // Write the SVG document to a file
+    std::ofstream output_file(output_filename);
+    if (output_file.is_open())
+    {
+        output_file << svg.str();
+        output_file.close();
+    }
+    else
+    {
+        std::cerr << "Error: could not write to file " << output_filename << std::endl;
+    }
+}
+
+void Chart::printScatterChart(const int point_size, const std::string &output_filename)
+{
+    // Find the maximum value in the data
+    int max_value = 0;
+    int min_value = INT_MAX;
+    for (const auto &[key, value] : this->dataset)
+    {
+        if (value > max_value)
+        {
+            max_value = value;
+        }
+        if (value < min_value)
+        {
+            min_value = value;
+        }
+    }
+
+    // Dynamically determine the height and width of the chart
+    int chart_height = max_value * 20 + 100;
+    int chart_width = (this->dataset.size() - 1) * 50 + 100;
+
+    // Calculate the slope and intercept of the line of best fit
+    double x_sum = 0;
+    double y_sum = 0;
+    double xy_sum = 0;
+    double x_squared_sum = 0;
+    int n = 0;
+    for (const auto &[key, value] : this->dataset)
+    {
+        double x = n;
+        double y = value;
+        x_sum += x;
+        y_sum += y;
+        xy_sum += x * y;
+        x_squared_sum += x * x;
+        n++;
+    }
+    double slope = (n * xy_sum - x_sum * y_sum) / (n * x_squared_sum - x_sum * x_sum);
+    double intercept = (y_sum - slope * x_sum) / n;
+
+    // Create the SVG document
+    std::stringstream svg;
+    svg << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" << chart_width << "\" height=\"" << chart_height << "\" viewBox=\"0 0 " << chart_width << " " << chart_height << "\">\n";
+
+    // Create the chart title
+    svg << "<text x=\"" << chart_width / 2 << "\" y=\"30\" text-anchor=\"middle\" font-size=\"20\">" << this->title << "</text>\n";
+
+    // Create the x-axis title
+    svg << "<text x=\"" << chart_width / 2 << "\" y=\"" << chart_height - 10 << "\" text-anchor=\"middle\" font-size=\"20\">" << this->x_axis_title << "</text>\n";
+
+    // Create the y-axis title
+    svg << "<text x=\"10\" y=\"" << chart_height / 2 + 10 << "\" text-anchor=\"middle\" font-size=\"20\" transform=\"rotate(270, 10, " << chart_height / 2 << ")\">" << this->y_axis_title << "</text>\n";
+
+    // Create the line of best fit
+    double x1 = 0;
+    double y1 = intercept;
+    double x2 = this->dataset.size() - 1;
+    double y2 = slope * x2 + intercept;
+    svg << "<line x1=\"" << x1 * 50 + 50 << "\" y1=\"" << chart_height - y1 * 20 - 50 << "\" x2=\"" << x2 * 50 + 50 << "\" y2=\"" << chart_height - y2 * 20 - 50 << "\" stroke=\"red\" stroke-width=\"2\" />\n";
+
+    // Create the points
+    int x = 50;
+    for (const auto &[key, value] : this->dataset)
+    {
+        int y = chart_height - value * 20 - 50;
+        svg << "<circle cx=\"" << x << "\" cy=\"" << y << "\" r=\"" << point_size << "\" fill=\"blue\" />\n";
+        svg << "<text x=\"" << x << "\" y=\"" << y - 10 << "\" text-anchor=\"middle\" font-size=\"15\">" << key << " " << value << "</text>\n";
         x += 50;
     }
 

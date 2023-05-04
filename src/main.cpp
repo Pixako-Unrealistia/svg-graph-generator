@@ -12,6 +12,7 @@ int main(int argc, const char *const *const argv)
 try
 {
 
+// NDEBUG is defined when compiling in debug mode using CMake
 #ifndef NDEBUG
 	const std::string settings_filename = "../settings.json";
 	const std::string data_filename = "../data.csv";
@@ -50,6 +51,9 @@ try
 		break;
 	case Chart::Type::PIE:
 		chart.printPieChart("output.svg");
+		break;
+	case Chart::Type::SCATTER:
+		chart.printScatterChart(10, "output.svg");
 		break;
 	}
 
