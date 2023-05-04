@@ -324,7 +324,7 @@ void Chart::printScatterChart(const int point_size, const std::string &output_fi
     }
 }
 
-void Chart::printHistogramChart()
+std::string Chart::getHistogramChartString()
 {
     // Find the length of the longest label in the dataset
     size_t maxLabelLength = 0;
@@ -334,16 +334,24 @@ void Chart::printHistogramChart()
     }
 
     // Print the chart with equal padding for all labels
+    std::stringstream ss;
     auto it = this->dataset.begin();
     while (it != this->dataset.end())
     {
-        std::cout << std::setw(maxLabelLength) << std::left << it->first << ": ";
+        ss << std::setw(maxLabelLength) << std::left << it->first << ": ";
         for (int i = 0; i < it->second; i++)
         {
-            std::cout << "*";
+            ss << "*";
         }
 
-        std::cout << " " << it->second << std::endl;
+        ss << " " << it->second << std::endl;
         it++;
     }
+
+    return ss.str();
+}
+
+void Chart::printHistogramChart()
+{
+    std::cout << this->getHistogramChartString();
 }

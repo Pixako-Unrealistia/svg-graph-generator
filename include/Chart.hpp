@@ -91,6 +91,13 @@ public:
     void printScatterChart(const int line_width, const std::string &output_filename);
 
     /**
+     * @brief Gets the string representation of the chart.
+     *
+     * @return The string representation of the chart.
+     */
+    std::string getHistogramChartString();
+
+    /**
      * @brief Prints histogram charts
      *
      */

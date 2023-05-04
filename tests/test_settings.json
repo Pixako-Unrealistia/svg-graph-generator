@@ -1,0 +1,11 @@
+
+//Available chart types:
+//bar, line, scatter, pie
+
+{
+	"Chart_Type" : "scatter",
+	"Chart_Title" : "Average Price of Various Foods",
+	"X_Axis_Title" : "Food",
+	"Y_Axis_Title" : "Average Price",
+	"Axis_Anchor" : "0,0"
+}
