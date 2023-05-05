@@ -90,4 +90,4 @@ int main(int argc, char *argv[])
 - CMakeLists.txt
 
 # Class Diagram
-![Screenshot](class diagram.png)
+![Screenshot](class_diagram.png)
