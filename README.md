@@ -88,3 +88,6 @@ int main(int argc, char *argv[])
 - settings.json
 - data.csv
 - CMakeLists.txt
+
+# Class Diagram
+![Screenshot](class diagram.png)
